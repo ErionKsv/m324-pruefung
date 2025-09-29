@@ -1,3 +1,4 @@
+# .github/workflows/ci.yml
 name: CI Pipeline   
 
 on:
@@ -10,24 +11,34 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest   
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4   
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4 
         with:
           node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          echo "Installing dependencies with npm ci (legacy peer deps for React 19 RC)"
+          npm ci --legacy-peer-deps
 
-      - name: Lint
-        run: npm run lint
+      - name: Run Linter
+        run: |
+          echo "Running ESLint to check code quality"
+          npm run lint
 
-      - name: Test
-        run: npm run test:ci
+      - name: Run Tests
+        run: |
+          echo "Running Jest tests in CI mode"
+          npm run test:ci
 
-      - name: Build
-        run: npm run build
+      - name: Build Application
+        run: |
+          echo "Building the application"
+          npm run build
