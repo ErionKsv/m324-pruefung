@@ -1,0 +1,22 @@
+# .github/workflows/ci.yml
+name: CI Pipeline   # Name der Pipeline
+
+on:
+  push:             # Pipeline läuft bei Push
+    branches:
+      - main        # nur auf main-Branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest   # Umgebung
+
+    steps:
+      - uses: actions/checkout@v4   # Code auschecken
+
+      - uses: actions/setup-node@v4 # Node.js installieren
+        with:
+          node-version: '18'
+
+      - run: npm install            # Dependencies installieren
+      - run: npm run build --if-present  # Falls ein Build-Script existiert
+      - run: npm test --if-present       # Falls Tests definiert sind
